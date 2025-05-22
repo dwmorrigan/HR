@@ -3,6 +3,8 @@
     This one is kind of ugly and I kind of don't care. This is Advent of Code 2025 day 5.
     * Part 1: This pure stumped me when I tried to do it in December. The fact that it is working now is enough for me and I'm moving on to see if I can't make it further "this year" than I have in the past.
     * Part 2: I think I can just "catch" the bad books and toss them to a seperate function that fixes the order and returns the corrected book?
+
+    Take set of updates as subset from total order - this should be an acyclic diagraph that can have an actual first page and last page.
 '''
 from collections import defaultdict, deque
 from stopwatch import Stopwatch
@@ -71,23 +73,35 @@ def valid_order(rules, updates):
             middles.append(int(update[len(update)//2]))
     return middles
 
-def fix_order(order, pages_to_arrange):
-    finally_in_order = []
-    for x in order:
-        # check each page. find page index from result.
-        if x in pages_to_arrange:
-            finally_in_order.append(x)
-    return 5
+def find_subset(cyclic_graphs, acyclic_input):
+    # Cyclic is updates
+    # Acyclic is rules
+    # sub_set is only the rules that are needed for an update
+    acyclic_output = []
+    for row in cyclic_graphs:
+        sub_set = {}
+        for before, after in acyclic_input.items():
+            if before in row:
+                # Only append those values that are also in row
+                ss = set(row) & set(after)
+                sub_set[before] = list(ss)
+        acyclic_output.append(sub_set)
+    return acyclic_output
 
 def main():
     sw = Stopwatch()
     sw.start()
-    filename = "aoc5.1.txt" # Part 1: 6041
+    filename = "aoc5.1.txt" 
     rules, updates = get_input(filename)
-    print(sum(valid_order(rules, updates)))
-    ordered = the_real_order(rules) # Graph is cyclical, so this is a bad idea
-    print(ordered)
-#    print(find_print_order(rules, updates))
+    print(sum(valid_order(rules, updates))) # Part 1: 6041
+    # Get update subset of rules - make function.
+    sub_graph = find_subset(updates, rules)
+    middle_pages = 0
+    for i in range(len(sub_graph)):
+        ordered = the_real_order(sub_graph[i]) 
+        if ordered != updates[i]:
+            middle_pages += int(ordered[len(ordered)//2])
+    print(middle_pages) # Part 2: 4884
     sw.stop()
     print(sw)
 

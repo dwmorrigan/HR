@@ -12,3 +12,4 @@ wheels/
 # Others
 .gitignore
 .python-version
+trash.py

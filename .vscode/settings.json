@@ -1,3 +1,8 @@
 {
-    "editor.parameterHints.enabled": false
+    "editor.parameterHints.enabled": false,
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
