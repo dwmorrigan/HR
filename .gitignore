@@ -13,3 +13,5 @@ wheels/
 .gitignore
 .python-version
 trash.py
+trash.txt
+trash2.txt
