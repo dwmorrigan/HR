@@ -25,6 +25,7 @@
     # 0,0,1 - 2 starts - fit 1 maybe (1,0),0,0,1?? 
 
 from itertools import product
+from stopwatch import Stopwatch
 
 class Solution:
     def canPlaceFlowers( self, flowerbed: list[ int ], n: int ) -> bool:
@@ -62,14 +63,32 @@ class Solution:
         return can_fit(sum, n)
         
 
+def f(flowerbed, n):
+    count = 0
+    for i in range(len(flowerbed)):
+        # Check if the current plot is empty.
+        if flowerbed[i] == 0:
+            # Check if the left and right plots are empty.
+            empty_left_plot = (i == 0) or (flowerbed[i - 1] == 0)
+            empty_right_lot = (i == len(flowerbed) - 1) or (flowerbed[i + 1] == 0)
+            # If both plots are empty, we can plant a flower here.
+            if empty_left_plot and empty_right_lot:
+                flowerbed[i] = 1
+                count += 1
+                if count >= n:
+                    return True
+    return count >= n
+
+
 def main():
+    sw = Stopwatch()
     s = Solution( )
     n = 3
     # I want to test many possible combinations. To do so, I make all of the 
     # combinations of 0 and 1 that are of particular length. If that's a valid 
     # combination (no two 1s are adjacent), then calculate how many flowerpots 
     # can be added and if that is >= the number of pots we want to add (n).
-    for beep in range( 7, 9 ):
+    for beep in range( 17, 20 ):
         matrices = list( product( [ 0, 1 ], repeat=beep ) )
         for x in matrices:
             nope = False
@@ -79,7 +98,15 @@ def main():
                     nope = True
                     break
             if not nope:
-                print(x, s.canPlaceFlowers( x, n ))
+                sw.start
+                a = s.canPlaceFlowers(x,n) # My solution
+                sw.stop()
+                print(sw, end=' ')
+                sw.restart()
+                b = f(x,n) # LeetCode's tutorial solution
+                sw.stop()
+                print(sw, end=' ')
+                print(x, a, b)
 
 
 if __name__ == "__main__":
