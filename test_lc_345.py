@@ -2,14 +2,18 @@ import pytest
 from lc_345 import Solution
 
 @pytest.fixture(autouse=True)
-def setup():
-    pass # I don't want to forget this but I also don't have a use for it yet.
+def solution():
+    solution = Solution()
+    return solution
 
-def test_reverseVowels():
-    x = Solution()
+def test_1(solution):
     s = "IceCreAm"
-    assert x.reverseVowels(s) == "AceCreIm"
+    assert solution.reverseVowels(s) == "AceCreIm"
+
+def test_2(solution):
     s = "abcdefg"
-    assert x.reverseVowels(s) == "ebcdafg"
+    assert solution.reverseVowels(s) == "ebcdafg"
+
+def test_3(solution):
     s = "leetcode"
-    assert x.reverseVowels(s) == "leotcede"
+    assert solution.reverseVowels(s) == "leotcede"
